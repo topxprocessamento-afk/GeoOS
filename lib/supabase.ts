@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Get environment variables
@@ -10,42 +9,31 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables (EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY)');
 }
 
-// Custom storage adapter for Supabase Auth
-const storage = {
-  getItem: async (key: string) => {
-    try {
-      const item = await SecureStore.getItemAsync(key);
-      return item;
-    } catch (error) {
-      console.error('SecureStore getItem error:', error);
-      return null;
-    }
-  },
-  setItem: async (key: string, value: string) => {
-    try {
-      await SecureStore.setItemAsync(key, value);
-    } catch (error) {
-      console.error('SecureStore setItem error:', error);
-    }
-  },
-  removeItem: async (key: string) => {
-    try {
-      await SecureStore.deleteItemAsync(key);
-    } catch (error) {
-      console.error('SecureStore removeItem error:', error);
-    }
-  },
-};
+// Use AsyncStorage for Supabase Auth (more reliable on Expo Go than SecureStore)
+const storage = AsyncStorage;
 
-// Create Supabase client
+// Create Supabase client with additional options for Expo Go
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storage: storage as any,
+    storage,
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,
   },
+  global: {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  },
 });
+
+// Add auth state listener for debugging
+supabase.auth.onAuthStateChange((event, session) => {
+  console.log('[Supabase Auth] Event:', event, 'Session:', session?.user?.email);
+});
+
+// Log Supabase initialization
+console.log('[Supabase] Client initialized with URL:', supabaseUrl.substring(0, 30) + '...');
 
 // Type definitions for database
 export type Profile = {

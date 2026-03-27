@@ -34,11 +34,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   login: async (email: string, password: string) => {
     set({ isLoading: true, error: null });
     try {
+      console.log('[Auth] Starting login for:', email);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
+      console.log('[Auth] Login response:', { hasError: !!error, errorMsg: error?.message, userId: data.user?.id });
       if (error) throw error;
       if (!data.user) throw new Error('No user returned from login');
 
