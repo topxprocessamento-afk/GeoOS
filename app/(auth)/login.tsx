@@ -27,10 +27,14 @@ export default function LoginScreen() {
     }
 
     try {
+      console.log('[Login Screen] Attempting login with email:', email);
       await login(email, password);
+      console.log('[Login Screen] Login successful');
       // Navigation is handled by the root layout
     } catch (err) {
+      console.error('[Login Screen] Login error:', err);
       const message = err instanceof Error ? err.message : 'Erro ao fazer login';
+      console.log('[Login Screen] Error message:', message);
       setLocalError(message);
     }
   };

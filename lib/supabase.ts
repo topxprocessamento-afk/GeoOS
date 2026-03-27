@@ -9,10 +9,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables (EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY)');
 }
 
-// Use AsyncStorage for Supabase Auth (more reliable on Expo Go than SecureStore)
+// Use AsyncStorage for all environments (React Native, Expo Go, etc)
 const storage = AsyncStorage;
 
-// Create Supabase client with additional options for Expo Go
+// Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage,
