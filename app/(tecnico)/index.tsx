@@ -145,13 +145,29 @@ export default function TecnicoDashboard() {
             )}
           </View>
 
-          {/* Action Button */}
-          <TouchableOpacity
-            onPress={() => (router.push as any)('ordens')}
-            className="bg-primary rounded-lg py-3 items-center justify-center mt-4"
-          >
-            <Text className="text-background font-semibold">Ver Todas as OSs</Text>
-          </TouchableOpacity>
+          {/* Navigation Buttons */}
+          <View className="gap-3">
+            <TouchableOpacity
+              onPress={() => (router.push as any)('/(tecnico)/camera')}
+              className="bg-success rounded-lg py-3 items-center justify-center"
+            >
+              <Text className="text-background font-semibold">📸 Abrir Câmera</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => (router.push as any)('/(tecnico)/ordens')}
+              className="bg-primary rounded-lg py-3 items-center justify-center"
+            >
+              <Text className="text-background font-semibold">📋 Ver Todas as OSs</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => (router.push as any)('/(tecnico)/perfil')}
+              className="bg-warning rounded-lg py-3 items-center justify-center"
+            >
+              <Text className="text-background font-semibold">👤 Meu Perfil</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </ScreenContainer>
